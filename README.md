@@ -1,6 +1,8 @@
 # 15418-final
 Parallel Audio Recognition by umalik and cjfische
 
+Check out our [project site](https://caseyfisch.github.io/15418-final-project/) if you want.
+
 ## About
 Here are the essentials for our final project, Kazam! Parallel Audio Recognition.  We developed our own audio fingerprinting algorithm to determine the similarity between two audio files.  This repository contains the following files:
 
@@ -9,7 +11,7 @@ Here are the essentials for our final project, Kazam! Parallel Audio Recognition
 * `parallel_service_queries.cpp` : This is our parallel version of finding a match.  It's fueled by OpenMP threads.  Nice.
 
 ## Build
-Sorry, we don't know how to do Makefiles, so here are the commands we used to compile our files.  
+Sorry, we don't really know how to do Makefiles, so here are the commands that you can use to compile our files!
 
 ### generate_histogram.c
 Note that this file requires libsndfile and FFTW3.  We installed these libraries on our mac with the following commands:
@@ -18,13 +20,13 @@ To install libsndfile:
 ```
 brew install libsndfile
 ```
-libsndfile is a library for reading the raw audio in WAV files.  Since generate_histogram.c reads a WAV file and constructs its audio fingerprint, this library is an essential part of our algorithm.
+[libsndfile](http://www.mega-nerd.com/libsndfile/) is a library for reading the raw audio in WAV files.  Since generate_histogram.c reads a WAV file and constructs its audio fingerprint, this library is an essential part of our algorithm.
 
 To install FFT3:
 ```
 brew install fftw
 ```
-FFTW is a long-standing C library for performing all kinds of Fourier transforms.  All kinds.  Since it's useful for us to have the frequency domain of an audio signal, instead of its time domain signal, we chose to use this library instead of implementing our own fast Fourier transform library.
+[FFTW](http://www.fftw.org/) is a long-standing C library for performing all kinds of Fourier transforms.  All kinds.  Since it's useful for us to have the frequency domain of an audio signal, instead of its time domain signal, we chose to use this library instead of implementing our own fast Fourier transform library.
 
 Okay, to actually compile:
 If you've installed the above libraries on your computer, you can run the following command to compile the file:
