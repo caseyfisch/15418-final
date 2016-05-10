@@ -1,8 +1,6 @@
 # 15418-final
 Parallel Audio Recognition by umalik and cjfische
 
-Check out our [project site](https://caseyfisch.github.io/15418-final-project/) if you want.
-
 ## About
 Here are the essentials for our final project, Kazam! Parallel Audio Recognition.  We developed our own audio fingerprinting algorithm to determine the similarity between two audio files.  This repository contains the following files:
 
@@ -104,8 +102,128 @@ Computed in : 2837.171 ms
 Best match: taro at 99.4846% similar
 ```
 
-As you might notice, this version takes as long as (if not longer than) the sequential version, which is why we have `sequential_service_queries.cpp` and `parallel_service_queries.cpp`.
+As you might notice, this version takes as long as (if not longer than) the sequential version, which is why we have `sequential_service_queries.cpp` and `parallel_service_queries.cpp`.  Let's check out those!
 
 ### sequential_service_queries.cpp
 
+So this match implementation actually loads our entire database up front, then performs any batch of queries you want to lookup, which is much more efficient that using file I/O to stream the comparison line by line for each file.  
+
+To compile:
+```
+g++ -m64 -std=c++11 sequential_service_queries.cpp -o sequential_service
+```
+
+The command line arguments are a little different for this implementation.  
+```
+./sequential_service path/to/database path/to/batch/of/queries
+```
+
+Here's an example.  We can actually feed the `dbpath` files into the executable because they're formatted the right way and contain the same data as a batch of queries would.
+```
+./sequential_service dbpaths100.txt dbpaths10.txt 
+Loading database...
+Done reading database!
+Getting query fingerprint 0...
+Best Match: breezeblocks, alt-j at 99.98% similarity
+Computed in : 68.876 ms
+ ---- 
+Getting query fingerprint 1...
+Best Match: everyotherfreckle, alt-j at 99.0156% similarity
+Computed in : 66.649 ms
+ ---- 
+Getting query fingerprint 2...
+Best Match: fitzpleasure, alt-j at 99.0153% similarity
+Computed in : 66.471 ms
+ ---- 
+Getting query fingerprint 3...
+Best Match: hungerofthepine, alt-j at 98.2377% similarity
+Computed in : 67.844 ms
+ ---- 
+Getting query fingerprint 4...
+Best Match: interlude, alt-j at 99.9357% similarity
+Computed in : 22.693 ms
+ ---- 
+Getting query fingerprint 5...
+Best Match: lefthandfree, alt-j at 99.8093% similarity
+Computed in : 53.955 ms
+ ---- 
+Getting query fingerprint 6...
+Best Match: matilda, alt-j at 99.9802% similarity
+Computed in : 66.755 ms
+ ---- 
+Getting query fingerprint 7...
+Best Match: taro at 99.4846% similarity
+Computed in : 70.558 ms
+ ---- 
+Getting query fingerprint 8...
+Best Match: somethinggood, alt-j at 98.0752% similarity
+Computed in : 61.991 ms
+ ---- 
+Getting query fingerprint 9...
+Best Match: warmfoothills, alt-j at 99.8765% similarity
+Computed in : 61.526 ms
+ ---- 
+TOTAL TIME ELAPSED for 10 QUERIES: 0.607317 s
+```
+
+We get a better idea of how long the queries actually take to process in this implementation compared to the first implementation.
+
 ### parallel_service_queries.cpp
+
+The parallel version of this implementation is also powered by OpenMP, so we compile with the same flag as before:
+```
+g++ -m64 -std=c++11 parallel_service_queries.cpp -fopenmp -o parallel_service
+```
+
+Same arguments as the sequential version:
+```
+./parallel_service dbpaths100.txt dbpaths10.txt 
+Loading database...
+Done reading database!
+Getting query fingerprint 0...
+Best Match: breezeblocks, alt-j at 99.98% similarity
+Computed in : 22.403 ms
+ ---- 
+Getting query fingerprint 1...
+Best Match: everyotherfreckle, alt-j at 99.0156% similarity
+Computed in : 21.012 ms
+ ---- 
+Getting query fingerprint 2...
+Best Match: fitzpleasure, alt-j at 99.0153% similarity
+Computed in : 22.333 ms
+ ---- 
+Getting query fingerprint 3...
+Best Match: hungerofthepine, alt-j at 98.2377% similarity
+Computed in : 21.593 ms
+ ---- 
+Getting query fingerprint 4...
+Best Match: interlude, alt-j at 99.9357% similarity
+Computed in : 7.715 ms
+ ---- 
+Getting query fingerprint 5...
+Best Match: lefthandfree, alt-j at 99.8093% similarity
+Computed in : 17.057 ms
+ ---- 
+Getting query fingerprint 6...
+Best Match: matilda, alt-j at 99.9802% similarity
+Computed in : 21.674 ms
+ ---- 
+Getting query fingerprint 7...
+Best Match: taro at 99.4846% similarity
+Computed in : 25.446 ms
+ ---- 
+Getting query fingerprint 8...
+Best Match: somethinggood, alt-j at 98.0752% similarity
+Computed in : 21.353 ms
+ ---- 
+Getting query fingerprint 9...
+Best Match: warmfoothills, alt-j at 99.8765% similarity
+Computed in : 23.036 ms
+ ---- 
+TOTAL TIME ELAPSED for 10 QUERIES: 0.203622 s
+```
+We can see the speedup with the parallel version! Nice!
+
+## For More Information...
+
+Check out our [project site](https://caseyfisch.github.io/15418-final-project/)!
