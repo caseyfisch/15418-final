@@ -79,7 +79,32 @@ Computed in : 2805.455 ms
 Best match: taro at 99.4695% similar
 ```
 
+If you search for a song that's not in the database, the program outputs the "most similiar" song, according to our metric of similarity.
+```
+./sequential_compare dbpaths90.txt ./database_songs/sunny-day.out
+===== RESULTS =====
+
+Computed in : 2515.913 ms
+Best match: Dark-Necessities,RHCP at 68.8816% similar
+```
+
 ### parallel_compare_query.cpp
+
+This program uses OpenMP, so we have to compile with the library flag for OpenMP.  No sweat.
+```
+g++ -m64 -std=c++11 parallel_compare_query.cpp -fopenmp -o parallel_compare
+```
+
+Run it exactly as you would the sequential version:
+```
+./parallel_compare dbpaths100.txt ./database_songs/taro.out
+===== RESULTS =====
+
+Computed in : 2837.171 ms
+Best match: taro at 99.4846% similar
+```
+
+As you might notice, this version takes as long as (if not longer than) the sequential version, which is why we have `sequential_service_queries.cpp` and `parallel_service_queries.cpp`.
 
 ### sequential_service_queries.cpp
 
