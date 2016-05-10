@@ -7,8 +7,12 @@ Check out our [project site](https://caseyfisch.github.io/15418-final-project/) 
 Here are the essentials for our final project, Kazam! Parallel Audio Recognition.  We developed our own audio fingerprinting algorithm to determine the similarity between two audio files.  This repository contains the following files:
 
 * `generate_histogram.c` : This is our sequential version for generating audio fingerprints.
-* `sequential_service_queries.cpp` : This is our sequential version of finding a match between a query fingerprint and our database of fingerprints. 
+* `sequential_compare_query.cpp` : This is our first sequential version of finding a match between a query song and the database.
+* `parallel_compare_query.cpp` : This is our first parallel version of finding a match.  
+* `sequential_service_queries.cpp` : This is our second (and better) sequential version of finding a match.
 * `parallel_service_queries.cpp` : This is our parallel version of finding a match.  It's fueled by OpenMP threads.  Nice.
+* `./database_songs/` : This is our database of songs!  A whopping 100 manually produced fingerprints.
+* `dbpaths*.txt` : These are databases of different sizes.  These files can be fed into any of the `*_compare_query.cpp` or `*_service_queries.cpp` files, as both the database or the batch of queries, or you can make your own.
 
 ## Build
 Sorry, we don't really know how to do Makefiles, so here are the commands that you can use to compile our files!
@@ -41,10 +45,42 @@ gcc -std=c99 generate_histogram.c -I/afs/cs.cmu.edu/academic/class/15418-s16/pub
 
 To run the executable, execute this command:
 ```
-./sequential_generate /path/to/wav/file song_name_and_artist /path/to/where/you/want/to/store/the/output.out
+./sequential_generate path/to/wav/file song_name_and_artist path/to/where/you/want/to/store/the/output.out
 ```
 Make sure you fill in the command arguments with the proper paths and you should get an output file filled with a ton of floating point numbers!  We suggest saving the output in `database_songs/`.  Up to you, though.
 
-## sequential_service_queries.cpp
+For example:
+```
+./sequential_generate IntoYou.wav IntoYou-ArianaGrande IntoYou.out 
+```
 
-## parallel_service_queries.cpp
+### sequential_compare_query.cpp
+
+This file doesn't require anything special.  Here's the command to compile:
+```
+g++ -m64 -std=c++11 sequential_compare_query.cpp -o sequential_compare
+```
+
+And to run:
+```
+./sequential_compare path/to/textfile/of/database/paths path/to/audiofingerprint/of/query
+```
+
+For example:
+```
+./sequential_compare dbpaths100.txt ./database_songs/taro.out
+```
+
+You should see output like this:
+```
+===== RESULTS =====
+
+Computed in : 2805.455 ms
+Best match: taro at 99.4695% similar
+```
+
+### parallel_compare_query.cpp
+
+### sequential_service_queries.cpp
+
+### parallel_service_queries.cpp
